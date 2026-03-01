@@ -49,3 +49,5 @@ To run the application, execute app.py. Here are some example prompts:
 5. How many Pitchfork music reviews have a score of 10? (Tool Call - Score Statistics)
 
 I will share the API keys for the separate APIs I have written via Slack.
+- AccuWeather ([https://www.accuweather.com](https://developer.accuweather.com/home)) : My free trial subscription for AccuWeather API expires on Mar 8, 2026. Please let me know if it needs to renewal.
+- SerpAPI ([ttps://serpapi.com/](https://serpapi.com/)) 
