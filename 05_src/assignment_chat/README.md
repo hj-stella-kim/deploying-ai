@@ -1,4 +1,4 @@
-# AI system with conversational interface using custom tools
+# AI system with conversational interface using custom services
 
 ## 1. Project Overview
 
