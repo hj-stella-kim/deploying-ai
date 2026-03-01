@@ -26,7 +26,7 @@ class SemanticSearchService:
         # Initialize TF-IDF Vectorizer for Lexical/Hybrid search
         self.vectorizer = TfidfVectorizer(stop_words='english')
         
-        # KEY FIX: Use the 'text_format' for indexing instead of raw JSON
+        # Use the 'text_format' for indexing instead of raw JSON
         # This ensures the search engine prioritizes Artist, Title, and Content keywords.
         texts = [r.get('text_format', 'empty') for r in self.records]
         
@@ -100,6 +100,7 @@ class SemanticSearchService:
         """
         Calculates similarity between the query and the entire dataset.
         """
+        print("perform music review search from Pitchfork music reviews database")
         # 1. Transform query to TF-IDF vector
         query_vec = self.vectorizer.transform([query])
         
@@ -241,6 +242,7 @@ class SemanticSearchService:
 
         return response_message.content
 
+# Testing
 if __name__ == "__main__":
     print("Initializing Music Discovery Service... Please wait.")
     service = SemanticSearchService()

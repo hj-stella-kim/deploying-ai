@@ -5,26 +5,23 @@ import requests
 from openai import OpenAI
 from dotenv import load_dotenv
 
-
 sys.path.append('../../05_src/')
 load_dotenv('../../05_src/.secrets')
 
-# OpenAI client setting 
+# accuweather setting
+WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
+WEATHER_API_URL = 'https://dataservice.accuweather.com/'
+WEATHER_API_HEADER = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {WEATHER_API_KEY}"
+}
 
+# OpenAI client setting 
 client = OpenAI(
     base_url='https://k7uffyg03f.execute-api.us-east-1.amazonaws.com/prod/openai/v1',
     api_key=os.getenv("OPENAI_API_KEY"),
     default_headers={"x-api-key": os.getenv('API_GATEWAY_KEY')}
 )
-
-# accuweather setting
-WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-WEATHER_API_URL = 'https://dataservice.accuweather.com/'
-
-WEATHER_API_HEADER = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {WEATHER_API_KEY}"
-}
 
 def get_location_key(city):
     """
@@ -52,15 +49,15 @@ def get_location_key(city):
                 locationKey = locationJson[0]["Key"]
                 city_name = locationJson[0]["LocalizedName"]
                 
-                print(f"✓ Valid location key found for {city_name}: {locationKey}")
+                print(f"Valid location key found for {city_name}: {locationKey}")
                 return locationKey, city_name
             else:
-                print(f"✗ No results found for: {city}")
+                print(f"No results found for: {city}")
         else:
-            print(f"✗ API error for {city}: {response.status_code}")
+            print(f"API error for {city}: {response.status_code}")
             
     except Exception as e:
-        print(f"✗ Error searching for {city}: {str(e)}")
+        print(f"Error searching for {city}: {str(e)}")
     
     return None, None
 
@@ -75,7 +72,7 @@ def get_city_weather(location_key, city_name):
     Returns:
         str: Natural language weather description
     """
-    print(f"\nFetching weather for {city_name}...")
+    print(f"Fetching weather for {city_name}...")
     response = requests.get(
         f'{WEATHER_API_URL}/currentconditions/v1/{location_key}',
         headers=WEATHER_API_HEADER
@@ -122,22 +119,21 @@ def get_weather_description(city):
     return weather_description
 
 
-# Example usage
+# test usage
 if __name__ == "__main__":
     location_key = None
     found_city = None
     
     # looping until valid location key is found
-    while location_key is None:
-        city_name = input("Enter city name you want to know weather: ")
-        location_key, found_city = get_location_key(city_name)
-        
-        if location_key is None:
-            print("Please try another city.\n")
+    city_name = input("Enter city name you want to know weather: ")
+    location_key, found_city = get_location_key(city_name)
+    
+    if location_key is None:
+        print("Errors to find a city key.\n")
     
     # Get and transform weather data
     weather_description = get_city_weather(location_key, found_city)
-    print(f"\n🌤️  Weather Summary for {found_city}:")
+    print(f"\nWeather Summary for {found_city}:\n")
     print(weather_description)
 
 
